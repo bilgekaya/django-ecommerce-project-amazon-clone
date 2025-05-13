@@ -1,32 +1,23 @@
-from django.shortcuts import render
-from django.http import HttpResponse,HttpResponseRedirect
-from django.contrib.auth import authenticate,login,logout
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.http import HttpResponse
 from django.urls import reverse
 
-# Create your views here.
-def demoPage(request):
-    return HttpResponse("demo Page")
-
-def demoPageTemplate(request):
-    return render(request,"demo.html")
-
+# Admin Login View
 def adminLogin(request):
-    return render(request,"admin_templates/signin.html")
+    # Eğer kullanıcı zaten giriş yaptıysa, admin home sayfasına yönlendir
+    if request.user.is_authenticated:
+        return redirect('admin_home')
 
-def adminLoginProcess(request):
-    username=request.POST.get("username")
-    password=request.POST.get("password")
+    # Kullanıcı giriş yapmak için POST isteği gönderdiğinde
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
-    user=authenticate(request=request,username=username,password=password)
-    if user is not None:
-        login(request=request,user=user)
-        return HttpResponseRedirect(reverse("admin_home"))
-    else:
-        messages.error(request,"Error in Login! Invalid Login Details!")
-        return HttpResponseRedirect(reverse("admin_login"))
-
-def adminLogoutProcess(request):
-    logout(request)
-    messages.success(request,"Logout Successfully!")
-    return HttpResponseRedirect(reverse("admin_login"))
+        # Kullanıcıyı authenticate et
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            # Kullanıcı doğruysa giriş yap
+            login(request, use
