@@ -1,27 +1,21 @@
-"""DjangoEcommerce URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/3.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
-from django.urls import path
-from DjangoEcommerceApp import views
-from DjangoEcommerceApp import AdminViews
+from django.urls import path, include
 from django.conf.urls.static import static
-from django.urls import include
 
+from DjangoEcommerceApp import views, AdminViews
 from DjangoEcommerce import settings
 
 urlpatterns = [
-    path('admindashboard/',include("DjangoEcommerceApp.adminurls"))
-]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)+static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
+    # Admin dashboard için alt URL'ler
+    path('admindashboard/', include("DjangoEcommerceApp.adminurls")),
+
+    # Admin giriş ve ana sayfa
+    path('admin/login/', views.adminLogin, name='admin_login'),
+    path('admin/home/', views.adminHome, name='admin_home'),
+
+    # Burada diğer URL'ler eklenebilir
+]
+
+# Medya ve statik dosya ayarları (sadece geliştirme ortamı için uygun)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
