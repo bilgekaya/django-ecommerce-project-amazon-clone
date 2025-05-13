@@ -1,27 +1,16 @@
-"""DjangoEcommerce URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/3.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-from django.contrib import admin
-from django.urls import path
-from DjangoEcommerceApp import views
-from DjangoEcommerceApp import AdminViews
+from django.urls import path, include
+from DjangoEcommerceApp import views  # views dosyasından gerekli import işlemi
+from DjangoEcommerceApp import AdminViews  # AdminViews dosyasından gerekli import işlemi
 from django.conf.urls.static import static
-from django.urls import include
-
-from DjangoEcommerce import settings
+from DjangoEcommerce import settings  # settings.py dosyasına erişim için gerekli import
 
 urlpatterns = [
-    path('admindashboard/',include("DjangoEcommerceApp.adminurls"))
-]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)+static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
+    # Admin dashboard'a yönlendirme (DjangoEcommerceApp/adminurls.py içindeki URL'leri include et)
+    path('admindashboard/', include("DjangoEcommerceApp.adminurls")),
+
+    # Admin login ve home sayfaları için URL'ler
+    path('admin/login/', views.adminLogin, name='admin_login'),  # Admin login sayfası
+    path('admin/home/', views.adminHome, name='admin_home'),  # Admin home sayfası
+
+    # Diğer URL'ler burada yer alabilir
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
