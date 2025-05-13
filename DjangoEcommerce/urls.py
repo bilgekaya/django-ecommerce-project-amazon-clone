@@ -18,10 +18,11 @@ from django.urls import path
 from DjangoEcommerceApp import views
 from DjangoEcommerceApp import AdminViews
 from django.conf.urls.static import static
-from django.urls import include
-
-from DjangoEcommerce import settings
+from django.urls import path
+from . import views
 
 urlpatterns = [
-    path('admindashboard/',include("DjangoEcommerceApp.adminurls"))
-]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)+static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
+    path('admin/login/', views.adminLogin, name='admin_login'),  # admin_login URL adı burada
+    path('admin/home/', views.adminHome, name='admin_home'),
+    # Diğer URL tanımları
+]
